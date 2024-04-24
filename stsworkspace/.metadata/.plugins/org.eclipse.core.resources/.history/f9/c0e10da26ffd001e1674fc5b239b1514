@@ -1,0 +1,5 @@
+package com.abc.tktbooking.repository;
+
+public interface UserRepository {
+
+}

@@ -1,0 +1,5 @@
+spring.application.name=apigatewayapp
+
+server.port = 9191
+
+spring.cloud.gateway.routes[0].id=

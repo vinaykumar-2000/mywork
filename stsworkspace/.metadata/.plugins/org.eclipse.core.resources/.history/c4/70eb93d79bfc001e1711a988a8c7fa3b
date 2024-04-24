@@ -1,0 +1,14 @@
+package com.abc.abcmart.service;
+
+import java.util.List;
+
+import com.abc.abcmart.entity.Order;
+
+public interface Orderservice {
+
+	Order saveOrder(Order order);
+	
+	Order getOrderDetails(int orderid);
+	
+	List<Order> getAllOrdersByCustomer(int customerId);
+}

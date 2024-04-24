@@ -1,0 +1,52 @@
+package com.abc.tktbooking.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.abc.abcmart.exceptions.ResourceNotFoundException;
+import com.abc.tktbooking.entity.Route;
+import com.abc.tktbooking.repository.RouteRepository;
+
+@Service
+public class RouteServiceImpl implements RouteService{
+	
+	@Autowired
+	private RouteRepository routeRepository;
+
+	@Override
+	public Route saveRoute(Route route) {
+		routeRepository.save(route);
+		return route;
+	}
+
+	@Override
+	public Route getRouteById(int routeId) {
+		Optional<Route> optionalRoute = routeRepository.findById(routeId);
+		if(optionalRoute.isEmpty()) {
+			throw new ResourceNotFoundException("Route not Existing with this Id : "+routeId);
+		}
+		return null;
+	}
+
+	@Override
+	public List<Route> getAllRoutes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Route updateRoute(Route route) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteRoute(int routeId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

@@ -1,0 +1,13 @@
+package com.abc.tktbookingservices;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class TktbookingServicesApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(TktbookingServicesApplication.class, args);
+	}
+
+}

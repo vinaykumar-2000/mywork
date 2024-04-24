@@ -1,0 +1,5 @@
+package com.abc.tktbooking.payload;
+
+public class TicketBookingPayload {
+
+}

@@ -1,0 +1,7 @@
+package com.abc.tktbookingservices.service;
+
+import org.springframework.cloud.openfeign.FallbackFactory;
+
+public class UserServiceFallbackFactory implements FallbackFactory<UserServiceConsumer>{
+
+}

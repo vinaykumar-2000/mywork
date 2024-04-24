@@ -1,0 +1,17 @@
+package com.abc.abcmart.service;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
+import com.abc.abcmart.entity.Product;
+
+public class ProductServiceTest {
+
+	@Test
+	public void testGetProductDetails() {
+		ProductServiceImpl productServiceImpl = new ProductServiceImpl();
+		Product product = productServiceImpl.getProductById(1);
+		assertEquals("Dell", product.getProductName());
+	}
+}

@@ -1,0 +1,5 @@
+package com.abc.tktbooking.entity;
+
+public class TicketBooking {
+
+}

@@ -1,0 +1,5 @@
+package com.abc.tktbookingservices.service;
+
+public interface RouteServiceConsumer {
+
+}

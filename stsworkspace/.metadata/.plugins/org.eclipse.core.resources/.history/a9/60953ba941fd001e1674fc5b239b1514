@@ -1,0 +1,40 @@
+package com.abc.abcmart.service;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.abc.abcmart.entity.Product;
+import com.abc.abcmart.repository.ProductRepository;
+
+@SpringBootTest
+public class ProductServiceTest {
+	
+	@InjectMocks
+	private ProductServiceImpl productService;
+	
+	@Mock
+	private ProductRepository productRepository;
+	
+	@Test
+	public void testGetProductDetails() {
+		Product product = new Product();
+		product.setProductId(111);
+		product.setProductName("ABCProduct");
+		product.setProductPrice(100);
+		product.setMfd(LocalDate.of(2000, 10, 10));
+		product.setCategory("mobbbi");
+		
+		when(productRepository.findById(111)).thenReturn(Optional.of(product));
+		
+		Product actualObj = productService.getProductById(111);
+		assertEquals("ABCProduct", actualObj.getProductName());
+	}
+}

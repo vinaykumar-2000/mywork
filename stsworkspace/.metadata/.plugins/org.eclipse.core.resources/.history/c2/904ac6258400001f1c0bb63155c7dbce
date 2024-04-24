@@ -1,0 +1,9 @@
+package com.abc.orderservice.model;
+
+public class OrderItemResponse {
+
+	private int orderItemId;
+	private int quantity;
+	private Product product;
+	
+}

@@ -1,0 +1,5 @@
+package com.abc.abcmart.repository;
+
+public interface CustomerRepository {
+
+}

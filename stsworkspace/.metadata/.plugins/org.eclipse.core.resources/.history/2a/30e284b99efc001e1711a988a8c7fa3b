@@ -1,0 +1,42 @@
+package com.abc.abcmart.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.abc.abcmart.entity.Order;
+import com.abc.abcmart.payload.OrderItemPayload;
+import com.abc.abcmart.repository.OrderRepository;
+
+@Service
+public class OrderServiceImpl implements Orderservice{
+	
+	@Autowired
+	private OrderRepository orderRepository;
+
+	@Override
+	public Order saveOrder(Order order) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Order getOrderDetails(int orderid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Order> getAllOrdersByCustomer(int customerId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Order createOrder(int customerId, List<OrderItemPayload> selectedProducts) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
