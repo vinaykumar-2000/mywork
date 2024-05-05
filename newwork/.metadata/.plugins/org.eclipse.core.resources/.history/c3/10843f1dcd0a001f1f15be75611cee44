@@ -1,0 +1,29 @@
+package com.capstone.mobilestore.service;
+
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+@Service
+public class CustomUserDetailsService implements UserDetailsService{
+
+	 @Autowired
+	    private RestTemplate restTemplate; // Assuming you have a RestTemplate bean configured
+
+	    @Override
+	    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	        // Assuming user-service provides an endpoint to fetch user details by username
+	        String userDetailsServiceUrl = "http://user-service/api/users/" + username;
+	        User user = restTemplate.getForObject(userDetailsServiceUrl, User.class);
+	        if (user == null) {
+	            throw new UsernameNotFoundException("User not found with username : " + username);
+	        }
+	        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
+	    }
+}

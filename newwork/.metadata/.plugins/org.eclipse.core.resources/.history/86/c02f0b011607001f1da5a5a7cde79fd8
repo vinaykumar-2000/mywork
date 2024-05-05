@@ -1,0 +1,49 @@
+package com.capstone.mobilestore.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.capstone.mobilestore.entity.Cart;
+import com.capstone.mobilestore.entity.CartItem;
+import com.capstone.mobilestore.repository.CartItemRepository;
+import com.capstone.mobilestore.repository.CartRepository;
+
+
+@Service
+public class CartItemServiceImpl implements CartItemService {
+
+	@Autowired
+	private CartItemRepository cartItemRepository;
+
+	@Autowired
+	private CartRepository cartRepository;
+
+	@Override
+	public CartItem addItemToCart(Long cartId, Long mobileId, int quantity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CartItem updateItemQuantity(Long itemId, int newQuantity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeItemFromCart(Long itemId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public CartItem getCartItemById(Long itemId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+
+}

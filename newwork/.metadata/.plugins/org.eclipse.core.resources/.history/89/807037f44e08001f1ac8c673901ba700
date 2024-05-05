@@ -1,0 +1,77 @@
+package com.capstone.mobilestore.service;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.capstone.mobilestore.entity.Cart;
+import com.capstone.mobilestore.entity.CartItem;
+import com.capstone.mobilestore.exception.ItemNotFoundException;
+import com.capstone.mobilestore.model.Mobile;
+import com.capstone.mobilestore.repository.CartItemRepository;
+import com.capstone.mobilestore.repository.CartRepository;
+
+@Service
+public class CartServiceImpl implements CartService{
+
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private CartItemService cartItemService;
+    
+    @Autowired
+    private MobileServiceConsumer mobileServiceConsumer;
+
+    @Autowired
+    private CustomerServiceConsumer customerServiceConsumer;
+
+	@Override
+	public Cart getCartById(Long cartId) throws ItemNotFoundException {
+		 return cartRepository.findById(cartId)
+	                .orElseThrow(() -> new ItemNotFoundException("Cart not found with id: " + cartId));
+	}
+
+	@Override
+	public Cart addItemToCart(Long cartId, Long mobileId, int quantity) throws ItemNotFoundException {
+		Cart cart = getCartById(cartId);
+        Mobile mobile = mobileServiceConsumer.getMobileDetails(mobileId);
+        if (mobile == null) {
+            throw new ItemNotFoundException("Mobile not found with id: " + mobileId);
+        }
+        cartItemService.addOrUpdateItem(cartId, mobileId, quantity);
+        return cart;
+	}
+
+	@Override
+	public Cart removeItemFromCart(Long cartId, Long itemId) throws ItemNotFoundException {
+		 Cart cart = getCartById(cartId);
+	        boolean removed = cartItemService.removeItem(itemId);
+	        if (!removed) {
+	            throw new ItemNotFoundException("Failed to remove item with id: " + itemId);
+	        }
+	        return cart;
+	}
+
+	@Override
+	public CartItem updateItemQuantity(Long itemId, int quantity) throws ItemNotFoundException {
+		return cartItemService.updateQuantity(itemId, quantity);
+	}
+
+	@Override
+	public Cart clearCart(Long cartId) throws ItemNotFoundException {
+		Cart cart = getCartById(cartId);
+        cart.getItems().forEach(item -> {
+            try {
+                cartItemService.removeItem(item.getId());
+            } catch (ItemNotFoundException e) {
+                // Log the exception details
+                System.err.println(e.getMessage());
+            }
+        });
+        cart.getItems().clear();
+        return cartRepository.save(cart);
+	}
+
+    
+}

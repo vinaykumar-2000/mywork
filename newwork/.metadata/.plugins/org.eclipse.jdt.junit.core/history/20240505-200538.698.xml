@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="OrderServiceTest" project="order-service" tests="6" started="6" failures="0" errors="0" ignored="0">
+  <testsuite name="com.capstone.mobilestore.service.OrderServiceTest" time="0.176" displayname="OrderServiceTest" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]">
+    <testcase name="testDeleteOrder" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.0" displayname="testDeleteOrder()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testDeleteOrder()]"/>
+    <testcase name="testGetOrderDetails_NotFound" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.0" displayname="testGetOrderDetails_NotFound()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testGetOrderDetails_NotFound()]"/>
+    <testcase name="testCreateOrder" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.0" displayname="testCreateOrder()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testCreateOrder()]"/>
+    <testcase name="testGetOrderDetails" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.125" displayname="testGetOrderDetails()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testGetOrderDetails()]"/>
+    <testcase name="testGetAllOrders" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.017" displayname="testGetAllOrders()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testGetAllOrders()]"/>
+    <testcase name="testSaveOrder" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.017" displayname="testSaveOrder()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testSaveOrder()]"/>
+  </testsuite>
+</testrun>

@@ -1,0 +1,10 @@
+package com.capstone.mobilestore.payload;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class OrderPayload {
+
+	private int customerId;
+	private List<OrderItemPayload> orderItems = new ArrayList<>();
+}

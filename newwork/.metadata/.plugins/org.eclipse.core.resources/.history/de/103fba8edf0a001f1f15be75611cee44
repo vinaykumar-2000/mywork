@@ -1,0 +1,50 @@
+package com.capstone.apigateway.filter;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
+import com.capstone.apigateway.util.JwtUtil;
+
+
+@Component
+public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
+
+	 private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
+    @Autowired
+    private RouteValidator validator;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    public AuthenticationFilter() {
+        super(Config.class);
+    }
+
+    @Override
+    public GatewayFilter apply(Config config) {
+    	 return (exchange, chain) -> {
+    	        var request = exchange.getRequest();
+    	        var headers = request.getHeaders();
+    	        if (!headers.containsKey("Authorization")) {
+    	            logger.warn("Missing Authorization header in request to " + request.getPath());
+    	            ServerHttpResponse response = exchange.getResponse();
+    	            response.setStatusCode(HttpStatus.UNAUTHORIZED);
+    	            return response.setComplete();
+    	        }
+
+    	        String authHeader = headers.getFirst("Authorization");
+    	        logger.info("Authorization header found: " + authHeader);
+    	        return chain.filter(exchange);
+    	    };
+    }
+
+    public static class Config {
+
+    }
+}

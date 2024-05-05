@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="OrderServiceTest" project="order-service" tests="6" started="6" failures="0" errors="1" ignored="0">
+  <testsuite name="com.capstone.mobilestore.service.OrderServiceTest" time="0.382" displayname="OrderServiceTest" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]">
+    <testcase name="testDeleteOrder" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.18" displayname="testDeleteOrder()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testDeleteOrder()]"/>
+    <testcase name="testGetOrderDetails_NotFound" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.02" displayname="testGetOrderDetails_NotFound()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testGetOrderDetails_NotFound()]"/>
+    <testcase name="testCreateOrder" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.016" displayname="testCreateOrder()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testCreateOrder()]"/>
+    <testcase name="testGetOrderDetails" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.084" displayname="testGetOrderDetails()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testGetOrderDetails()]"/>
+    <testcase name="testGetAllOrders" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.039" displayname="testGetAllOrders()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testGetAllOrders()]">
+      <error>java.lang.NullPointerException: Cannot invoke "java.util.List.iterator()" because "orderItemList" is null&#13;
+	at com.capstone.mobilestore.service.OrderServiceImpl.getAllOrders(OrderServiceImpl.java:138)&#13;
+	at com.capstone.mobilestore.service.OrderServiceTest.testGetAllOrders(OrderServiceTest.java:111)&#13;
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)&#13;
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)&#13;
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)&#13;
+&#13;
+</error>
+    </testcase>
+    <testcase name="testSaveOrder" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.01" displayname="testSaveOrder()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testSaveOrder()]"/>
+  </testsuite>
+</testrun>

@@ -1,0 +1,56 @@
+package com.capstone.mobilestore.controller;
+
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.capstone.mobilestore.entity.CartItem;
+import com.capstone.mobilestore.service.CartItemServiceImpl;
+
+
+@RestController
+@RequestMapping("/cartItem")
+public class CartItemController {
+	
+	@Autowired
+	private CartItemServiceImpl cartItemServiceImpl;
+
+	@PostMapping
+    public ResponseEntity<CartItem> addCartItem(
+            @RequestParam Long cartId,
+            @RequestParam Long mobileId,
+            @RequestParam int quantity,
+            @RequestParam double price) {
+        CartItem newItem = cartItemServiceImpl.addItemToCart(cartId, mobileId, quantity, price);
+        return new ResponseEntity<>(newItem,HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{itemId}")
+    public ResponseEntity<CartItem> updateCartItem(@PathVariable("itemId") Long itemId, @RequestParam int quantity) {
+        CartItem updatedItem = cartItemServiceImpl.updateItemQuantity(itemId, quantity);
+        return new ResponseEntity<>(updatedItem,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<Void> removeCartItem(@PathVariable("itemId") Long itemId) {
+        cartItemServiceImpl.removeItemFromCart(itemId);
+        ResponseEntity<Void> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+		return responseEntity;
+    }
+
+    @GetMapping("/{itemId}")
+    public ResponseEntity<CartItem> getCartItem(@PathVariable Long itemId) {
+        CartItem item = cartItemServiceImpl.getCartItemById(itemId);
+        return new ResponseEntity<>(item,HttpStatus.OK);
+    }
+}

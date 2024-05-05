@@ -1,0 +1,13 @@
+package com.capstone.mobilestore.service;
+
+import com.capstone.mobilestore.model.Mobile;
+
+public class MobileServiceFallbackFactory implements MobileConsumer{
+
+	@Override
+	public Mobile getMobileById(Long mobileId) {
+		// TODO Auto-generated method stub
+		return new Mobile();
+	}
+
+}

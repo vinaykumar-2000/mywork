@@ -1,0 +1,13 @@
+package com.abc.springjwt.service;
+
+
+
+import com.abc.springjwt.model.Login;
+import com.abc.userservices.entity.UserEntity;
+
+public interface AuthService {
+
+	 String login(Login login);
+	 
+	 UserEntity register(UserEntity userEntity);
+}

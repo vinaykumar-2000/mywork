@@ -1,0 +1,53 @@
+package com.capstone.mobilestore.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.capstone.mobilestore.entity.Admin;
+import com.capstone.mobilestore.entity.Mobile;
+import com.capstone.mobilestore.exception.ResourceNotFoundException;
+import com.capstone.mobilestore.repository.AdminRepository;
+
+@Service
+public class AdminServiceImpl implements AdminService{
+	
+	@Autowired
+	private AdminRepository adminRepository;
+
+	@Override
+	public Admin createAdmin(Admin admin) {
+		return adminRepository.save(admin);
+	}
+
+	@Override
+	public Admin getAdminById(Long id) {
+		Optional<Admin> optionalMobile = adminRepository.findById(id);
+		if(optionalMobile.isEmpty()) {
+			throw new ResourceNotFoundException("Mobile not Existing with this id : "+id);
+		}
+		Admin admin = optionalMobile.get();
+			return admin;
+	}
+
+	@Override
+	public List<Admin> getAllAdmins() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Admin updateAdmin(Long id, Admin adminDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteAdmin(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

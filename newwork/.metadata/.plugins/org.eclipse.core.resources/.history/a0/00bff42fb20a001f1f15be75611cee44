@@ -1,0 +1,15 @@
+spring.application.name=springjwt
+
+
+server.port= 8090
+
+spring.datasource.url = jdbc:oracle:thin:@localhost:1521/XE
+spring.datasource.username = c##capstone
+spring.datasource.password = capstone
+
+spring.jpa.show-sql = true
+spring.jpa.hibernate.ddl-auto= create
+
+app.jwt-secret = daf66e01593f61a15b857cf433aae03a005812b31234e149036bcc8dee755dbb
+
+app.jwt-expiration-milliseconds = 604800000

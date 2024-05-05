@@ -1,0 +1,5 @@
+package com.abc.userservices.services;
+
+public class AuthServiceImplTest {
+
+}

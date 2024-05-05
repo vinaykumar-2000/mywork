@@ -1,0 +1,16 @@
+package com.capstone.mobilestore.service;
+
+import java.util.List;
+
+import com.capstone.mobilestore.entity.Order;
+import com.capstone.mobilestore.model.OrderResponse;
+import com.capstone.mobilestore.payload.OrderItemPayload;
+
+public interface OrderService {
+
+	Order createOrder(int customerId, List<OrderItemPayload> selectedMobiles);
+    OrderResponse getOrderDetails(int orderId);
+    List<OrderResponse> getAllOrders();
+    Order updateOrder(int orderId, List<OrderItemPayload> updatedItems);
+    void deleteOrder(int orderId);
+}

@@ -1,0 +1,5 @@
+package com.abc.springjwt.config;
+
+public class SpringSecurityConfig {
+
+}

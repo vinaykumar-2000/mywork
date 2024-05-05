@@ -1,0 +1,13 @@
+package com.abc.uservices.service;
+
+
+
+import com.abc.userservices.entity.UserEntity;
+import com.abc.userservices.model.Login;
+
+public interface AuthService {
+
+	 String login(Login login);
+	 
+	 UserEntity register(UserEntity userEntity);
+}

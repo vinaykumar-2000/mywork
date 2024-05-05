@@ -1,0 +1,5 @@
+package com.abc.springjwt.controller;
+
+public class AuthController {
+
+}

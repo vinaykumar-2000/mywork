@@ -1,0 +1,5 @@
+package com.capstone.mobilestore.service;
+
+public interface UserService {
+
+}

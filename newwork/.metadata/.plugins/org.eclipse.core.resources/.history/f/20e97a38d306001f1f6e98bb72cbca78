@@ -1,0 +1,5 @@
+package com.capstone.mobilestore.entity;
+
+public class Cart {
+
+}

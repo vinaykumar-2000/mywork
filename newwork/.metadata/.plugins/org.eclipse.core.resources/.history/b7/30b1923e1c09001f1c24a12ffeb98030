@@ -1,0 +1,5 @@
+package com.abc.springjwt.service;
+
+public class CustomUserDetailsService {
+
+}

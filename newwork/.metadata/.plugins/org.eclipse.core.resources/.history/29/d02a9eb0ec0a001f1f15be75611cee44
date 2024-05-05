@@ -1,0 +1,146 @@
+package com.capstone.mobilestore.service;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.capstone.mobilestore.entity.Order;
+import com.capstone.mobilestore.exception.ItemNotFoundException;
+import com.capstone.mobilestore.model.Customer;
+import com.capstone.mobilestore.model.Mobile;
+import com.capstone.mobilestore.model.OrderItemResponse;
+import com.capstone.mobilestore.model.OrderResponse;
+import com.capstone.mobilestore.payload.OrderItemPayload;
+import com.capstone.mobilestore.repository.OrderRepository;
+
+@SpringBootTest
+public class OrderServiceTest {
+
+	 @InjectMocks
+	    private OrderServiceImpl orderService;
+	 
+	 @Mock
+	    private OrderRepository orderRepository;
+
+	    @Mock
+	    private MobileServiceConsumer mobileService;
+
+	    @Mock
+	    private CustomerServiceConsumer customerService;
+
+	    @Test
+	    void testSaveOrder() {
+	        Order order = new Order();
+	        when(orderRepository.save(order)).thenReturn(order);
+	        Order savedOrder = orderService.saveOrder(order);
+	        assertEquals(order, savedOrder);
+	    }
+
+	    @Test
+	    void testCreateOrder() {
+	        long customerId = 1L;
+	        List<OrderItemPayload> items = new ArrayList<>();
+	        items.add(new OrderItemPayload(1L, 2)); // Assuming constructor takes mobileId and quantity
+
+	        Customer customer = new Customer();
+	        Mobile mobile = new Mobile();
+	        mobile.setPrice(500.00);
+
+	        when(customerService.getCustomerDetails(customerId)).thenReturn(customer);
+	        when(mobileService.getMobileDetails(1L)).thenReturn(mobile);
+
+	        Order result = orderService.createOrder(customerId, items);
+
+	        assertNotNull(result);
+	        assertEquals(LocalDate.now(), result.getOrderDate());
+	        assertEquals(1000.00, result.getOrderTotal());
+	        verify(orderRepository).save(result);
+	    }
+
+	    @Test
+	    void testGetOrderDetails() {
+	        long orderId = 1L;
+	        Order order = mock(Order.class);
+	        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
+
+	        OrderResponse response = orderService.getOrderDetails(orderId);
+	        assertNotNull(response);
+	        verify(orderRepository).findById(orderId);
+	    }
+
+	    @Test
+	    void testGetOrderDetails_NotFound() {
+	        long orderId = 1L;
+	        when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
+
+	        assertThrows(ItemNotFoundException.class, () -> {
+	            orderService.getOrderDetails(orderId);
+	        });
+	    }
+
+	    @Test
+	    void testGetAllOrders() {
+	    	  Order order = new Order();
+	          when(order.getId()).thenReturn(1L);
+	          when(order.getOrderDate()).thenReturn(java.time.LocalDate.now());
+	          when(order.getOrderTotal()).thenReturn(100.0);
+	          when(order.getStatus()).thenReturn("completed");
+	          when(order.getPaymentMethod()).thenReturn("credit card");
+	          when(order.getCustomerId()).thenReturn(1L);
+	          when(order.getOrderItems()).thenReturn(null); // To mimic null order items
+
+	          Customer customer = new Customer();
+	          customer.setName("John Doe");
+	          
+	          when(customerService.getCustomerDetails(1L)).thenReturn(customer);
+	          when(orderRepository.findAll()).thenReturn(Arrays.asList(order));
+
+	          List<OrderResponse> responses = orderService.getAllOrders();
+
+	          for (OrderResponse response : responses) {
+	              System.out.println("Order ID: " + response.getId());
+	              System.out.println("Order Date: " + response.getOrderDate());
+	              System.out.println("Order Total: " + response.getOrderTotal());
+	              System.out.println("Order Status: " + response.getStatus());
+	              System.out.println("Payment Method: " + response.getPaymentMethod());
+	              System.out.println("Customer Name: " + response.getCustomer().getName());
+	              if (response.getOrderItems() != null) {
+	                  response.getOrderItems().forEach(item -> {
+	                      System.out.println("    Item ID: " + item.getId());
+	                      System.out.println("    Item Total: " + item.getItemTotal());
+	                      System.out.println("    Quantity: " + item.getQuantity());
+	                  });
+	              } else {
+	                  System.out.println("    No items in this order.");
+	              }
+	          }
+	    }
+	    
+
+	    @Test
+	    void testDeleteOrder() {
+	        long orderId = 1L;
+	        doNothing().when(orderRepository).deleteById(orderId);
+
+	        orderService.deleteOrder(orderId);
+	        verify(orderRepository).deleteById(orderId);
+	    }
+}

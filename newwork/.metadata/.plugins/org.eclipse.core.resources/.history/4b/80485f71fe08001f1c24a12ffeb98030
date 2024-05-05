@@ -1,0 +1,101 @@
+package com.capstone.mobilestore.service;
+
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.capstone.mobilestore.entity.Cart;
+import com.capstone.mobilestore.entity.CartItem;
+import com.capstone.mobilestore.exception.ItemNotFoundException;
+import com.capstone.mobilestore.model.CartResponse;
+import com.capstone.mobilestore.model.Customer;
+import com.capstone.mobilestore.model.Mobile;
+import com.capstone.mobilestore.payload.CartItemPayload;
+import com.capstone.mobilestore.repository.CartRepository;
+
+@Service
+public class CartServiceImpl implements CartService{
+
+    @Autowired
+    private CartRepository cartRepository;
+   
+    @Autowired
+    private CustomerServiceConsumer customerService;
+    
+    @Autowired
+    private MobileServiceConsumer mobileService;
+
+	@Override
+	public Cart saveCart(Cart cart) {
+		cartRepository.save(cart);
+		return cart;
+	}
+
+	@Override
+	public Cart createCart(long customerId, List<CartItemPayload> selectedMobiles) {
+		Customer customer = customerService.getCustomerDetails(customerId);
+		
+		Cart cart  = new Cart();
+		cart.setCustomerId(customerId);
+		cart.setStatus("Pending");
+		cart.setCartDate(LocalDate.now());
+		
+		List<CartItem> cartItems = new ArrayList<>();
+		
+		double itemTotal = 0;
+		
+		for(CartItemPayload po : selectedMobiles) {
+			long mobileId = po.getMobileId();
+			int qty = po.getQantity();
+			Mobile mobile = mobileService.getMobileDetails(mobileId);
+			System.out.println("ItemTotal : "+ mobile.getPrice() * qty);
+			
+			CartItem cartItem = new CartItem();
+			cartItem.setMobileId(mobileId);
+			cartItem.setItemTotal(mobile.getPrice() * qty);
+			cartItem.setQuantity(qty);
+			cartItem.setCart(cart);
+			cartItems.add(cartItem);
+			
+			cartTotal = cartTotal + (mobile.getPrice() * qty);
+			
+		}
+		
+		cart.setCartTotal(cartTotal);
+		cart.setCartItems(cartItems);
+		saveCart(cart);
+		return cart;
+		
+	}
+
+	@Override
+	public CartResponse getCartDetails(long cartId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<CartResponse> getAllCarts() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Cart updateCart(long cartId, List<CartItemPayload> updatedItems) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteCart(long cartId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+}

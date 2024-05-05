@@ -1,0 +1,15 @@
+package com.capstone.mobilestore.repository;
+
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.capstone.mobilestore.entity.CartItem;
+
+
+public interface CartItemRepository extends JpaRepository<CartItem, Long>{
+
+	 @Query(value = "SELECT * FROM cart_items WHERE cart_id = :cartId AND mobile_id = :mobileId", nativeQuery = true)
+	CartItem findByCartIdAndMobileId(Long cartId, Long mobileId);
+
+}

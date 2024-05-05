@@ -1,0 +1,5 @@
+package com.capstone.mobilestore.config;
+
+public class MobileSecurityConfig {
+
+}

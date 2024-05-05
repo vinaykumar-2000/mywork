@@ -1,0 +1,17 @@
+package com.capstone.mobilestore.repository;
+
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.capstone.mobilestore.entity.Cart;
+import com.capstone.mobilestore.entity.CartItem;
+import com.capstone.mobilestore.model.Mobile;
+
+
+public interface CartItemRepository extends JpaRepository<CartItem, Long>{
+
+	Optional<CartItem> findByCartAndMobile(Cart cart, Mobile mobile);
+
+
+}

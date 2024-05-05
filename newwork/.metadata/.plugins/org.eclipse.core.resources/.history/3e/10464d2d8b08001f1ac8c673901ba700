@@ -1,0 +1,169 @@
+package com.capstone.mobilestore.service;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.capstone.mobilestore.entity.Order;
+import com.capstone.mobilestore.entity.OrderItem;
+import com.capstone.mobilestore.exception.ItemNotFoundException;
+import com.capstone.mobilestore.model.Customer;
+import com.capstone.mobilestore.model.Mobile;
+import com.capstone.mobilestore.model.OrderItemResponse;
+import com.capstone.mobilestore.model.OrderResponse;
+import com.capstone.mobilestore.payload.OrderItemPayload;
+import com.capstone.mobilestore.repository.OrderRepository;
+
+@Service
+public class OrderServiceImpl implements OrderService {
+
+	@Autowired
+	private OrderRepository orderRepository;
+
+	@Autowired
+	private MobileServiceConsumer mobileService;
+
+	@Autowired
+	private CustomerServiceConsumer customerService;
+
+	@Override
+	public Order saveOrder(Order order) {
+		orderRepository.save(order);
+		return order;
+	}
+
+	@Override
+	public Order createOrder(long customerId, List<OrderItemPayload> selectedMobiles) {
+		Customer customer = customerService.getCustomerDetails(customerId);
+
+		Order order = new Order();
+		order.setOrderDate(LocalDate.now());
+		order.setStatus("pending");
+		order.setPaymentMethod("pending");
+		order.setCustomerId(customerId);
+
+		List<OrderItem> orderItems = new ArrayList<>();
+
+		double orderTotal = 0;
+
+		for (OrderItemPayload po : selectedMobiles) {
+			long mobileId = po.getMobileId();
+			int qty = po.getQantity();
+			Mobile mobile = mobileService.getMobileDetails(mobileId);
+			System.out.println("Itemtotal: " + mobile.getPrice() * qty);
+
+			OrderItem orderItem = new OrderItem();
+			orderItem.setId(mobileId);
+			orderItem.setItemTotal(mobile.getPrice() * qty);
+			orderItem.setQuantity(qty);
+			orderItem.setOrder(order);
+			orderItems.add(orderItem);
+
+			orderTotal = orderTotal + (mobile.getPrice() * qty);
+		}
+		order.setOrderTotal(orderTotal);
+		order.setOrderItems(orderItems);
+		return order;
+	}
+
+	@Override
+	public OrderResponse getOrderDetails(long orderId) {
+		Optional<Order> optionalOrder = orderRepository.findById(orderId);
+		if (optionalOrder.isEmpty()) {
+			throw new ItemNotFoundException("Order Not Found with this id :" + orderId);
+		}
+
+		Order order = optionalOrder.get();
+
+		OrderResponse orderResponse = new OrderResponse();
+		orderResponse.setId(order.getId());
+		orderResponse.setOrderDate(order.getOrderDate());
+		orderResponse.setOrderTotal(order.getOrderTotal());
+		orderResponse.setStatus(order.getStatus());
+		orderResponse.setPaymentMethod(order.getPaymentMethod());
+
+		Long CustomerId = order.getCustomerId();
+		Customer customer = customerService.getCustomerDetails(CustomerId);
+
+		orderResponse.setCustomer(customer);
+
+		List<OrderItemResponse> orderItems = new ArrayList<>();
+
+		List<OrderItem> oitems = order.getOrderItems();
+
+		for (OrderItem oi : oitems) {
+			OrderItemResponse oitemResp = new OrderItemResponse();
+			oitemResp.setId(oi.getId());
+			oitemResp.setItemTotal(oi.getItemTotal());
+			oitemResp.setQuantity(oi.getQuantity());
+
+			Long pid = oi.getMobileId();
+			Mobile mobile = mobileService.getMobileDetails(pid);
+			oitemResp.setMobile(mobile);
+
+			orderItems.add(oitemResp);
+		}
+
+		orderResponse.setOrderItems(orderItems);
+
+		return orderResponse;
+	}
+
+	@Override
+	public List<OrderResponse> getAllOrders() {
+		 List<Order> orderList = orderRepository.findAll();
+		    List<OrderResponse> orderResponses = new ArrayList<>();
+
+		    for (Order order : orderList) {
+		        OrderResponse orderResponse = new OrderResponse();
+		        orderResponse.setId(order.getId());
+		        orderResponse.setOrderDate(order.getOrderDate());
+		        orderResponse.setOrderTotal(order.getOrderTotal());
+		        orderResponse.setStatus(order.getStatus());
+		        orderResponse.setPaymentMethod(order.getPaymentMethod());
+
+		        long customerId = order.getCustomerId();
+		        Customer customer = customerService.getCustomerDetails(customerId);
+		        orderResponse.setCustomer(customer);
+
+		        List<OrderItemResponse> orderItems = new ArrayList<>();
+
+		        List<OrderItem> orderItemList = order.getOrderItems();
+
+		        for (OrderItem orderItem : orderItemList) {
+		            OrderItemResponse orderItemResponse = new OrderItemResponse();
+		            orderItemResponse.setId(orderItem.getId());
+		            orderItemResponse.setItemTotal(orderItem.getItemTotal());
+		            orderItemResponse.setQuantity(orderItem.getQuantity());
+
+		            long mobileId = orderItem.getMobileId();
+		            Mobile mobile = mobileService.getMobileDetails(mobileId);
+		            orderItemResponse.setMobile(mobile);
+
+		            orderItems.add(orderItemResponse);
+		        }
+
+		        orderResponse.setOrderItems(orderItems);
+		        orderResponses.add(orderResponse);
+		    }
+
+		    return orderResponses;
+	}
+
+	@Override
+	public Order updateOrder(long orderId, List<OrderItemPayload> updatedItems) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteOrder(long orderId) {
+		orderRepository.deleteById(orderId);
+
+	}
+
+}

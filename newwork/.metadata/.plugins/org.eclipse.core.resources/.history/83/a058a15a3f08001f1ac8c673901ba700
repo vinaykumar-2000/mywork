@@ -1,0 +1,5 @@
+package com.capstone.mobilestore.dto;
+
+public class UserDto {
+
+}

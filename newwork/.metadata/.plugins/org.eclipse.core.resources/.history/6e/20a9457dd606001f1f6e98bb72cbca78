@@ -1,0 +1,15 @@
+package com.capstone.mobilestore.service;
+
+import com.capstone.mobilestore.entity.CartItem;
+
+public interface CartItemService {
+
+	CartItem addItemToCart(Long cartId, Long productId, int quantity, double price);
+
+    CartItem updateItemQuantity(Long itemId, int newQuantity);
+
+    void removeItemFromCart(Long itemId);
+
+    CartItem getCartItemById(Long itemId);
+
+}

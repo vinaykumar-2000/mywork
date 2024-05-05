@@ -1,0 +1,58 @@
+package com.capstone.mobilestore.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.capstone.mobilestore.entity.Cart;
+import com.capstone.mobilestore.entity.CartItem;
+import com.capstone.mobilestore.exception.ResourceNotFoundException;
+import com.capstone.mobilestore.repository.CartItemRepository;
+import com.capstone.mobilestore.repository.CartRepository;
+
+import io.swagger.v3.oas.annotations.servers.Server;
+
+@Server
+public class CartItemServiceImpl implements CartItemService{
+	
+	@Autowired
+	 private CartItemRepository cartItemRepository;
+
+	    @Autowired
+	    private CartRepository cartRepository;
+
+	@Override
+	public CartItem addItemToCart(Long cartId, Long mobileId, int quantity, double price) {
+		Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new ResourceNotFoundException("CartItem with id " + cartId + " not found"));
+		CartItem newItem = new CartItem();
+        newItem.setCart(cart);
+        newItem.setMobileId(mobileId);
+        newItem.setQuantity(quantity);
+        newItem.setPrice(price);
+        return cartItemRepository.save(newItem);
+	}
+
+	@Override
+	public CartItem updateItemQuantity(Long itemId, int newQuantity) {
+		 CartItem item = cartItemRepository.findById(itemId).orElseThrow(() -> new ResourceNotFoundException("Item not found with this id : "+itemId));
+	        item.setQuantity(newQuantity);
+	        return cartItemRepository.save(item);
+	}
+
+	@Override
+	public void removeItemFromCart(Long itemId) {
+		Optional<CartItem> optionalCartItem = cartItemRepository.findById(itemId);
+		if(optionalCartItem.isEmpty()) {
+			throw new ResourceNotFoundException("CartItem with id " + itemId + " not found");
+		}
+		CartItem cartItem = optionalCartItem.get();
+		cartItemRepository.delete(cartItem);
+	}
+
+	@Override
+	public CartItem getCartItemById(Long itemId) {
+		 return cartItemRepository.findById(itemId).orElseThrow(() -> new ResourceNotFoundException("Item not found with this id : "+itemId));
+	}
+
+}

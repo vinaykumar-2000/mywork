@@ -1,0 +1,5 @@
+package com.capstone.mobilestore.repository;
+
+public interface AdminRepository {
+
+}

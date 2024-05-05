@@ -1,0 +1,11 @@
+package com.capstone.mobilestore.service;
+
+import com.capstone.mobilestore.entity.User;
+import com.google.common.base.Optional;
+
+public interface UserService {
+
+	User registerAdmin(String username, String password);
+    User registerCustomer(String username, String password);
+	
+}

@@ -1,0 +1,53 @@
+package com.capstone.mobilestore.controller;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.capstone.mobilestore.entity.Cart;
+import com.capstone.mobilestore.exception.ItemNotFoundException;
+import com.capstone.mobilestore.request.AddToCartRequest;
+import com.capstone.mobilestore.request.UpdateQuantityRequest;
+import com.capstone.mobilestore.service.CartServiceImpl;
+
+@RestController
+@RequestMapping("/cart")
+public class CartController {
+	
+	@Autowired
+	private CartServiceImpl cartService;
+
+	@PostMapping("/add")
+    public ResponseEntity<Cart> addToCart(@RequestBody AddToCartRequest request) throws ItemNotFoundException {
+        Cart cart = cartService.addToCart(request.getCustomerId(), request.getMobileId());
+        return ResponseEntity.ok(cart);
+    }
+
+    @DeleteMapping("/{cartId}/items/{mobileId}")
+    public ResponseEntity<?> removeFromCart(@PathVariable Long cartId, @PathVariable Long mobileId) throws ItemNotFoundException {
+        cartService.removeFromCart(cartId, mobileId);
+        return ResponseEntity.noContent().build(); // Return 204 No Content on successful removal
+    }
+
+    @PutMapping("/{cartId}/items/{mobileId}")
+    public ResponseEntity<Cart> updateQuantity(@PathVariable Long cartId, @PathVariable Long mobileId, @RequestBody UpdateQuantityRequest request) throws ItemNotFoundException {
+        cartService.updateQuantity(cartId, mobileId, request.getNewQuantity());
+        return ResponseEntity.ok(cartService.getCartDetails(cartId)); // Return the updated cart details
+    }
+
+    @GetMapping("/{cartId}")
+    public ResponseEntity<Cart> getCartDetails(@PathVariable Long cartId) throws ItemNotFoundException {
+        Cart cart = cartService.getCartDetails(cartId);
+        return ResponseEntity.ok(cart);
+    }
+}

@@ -1,0 +1,46 @@
+package com.capstone.mobilestore.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.capstone.mobilestore.entity.Cart;
+import com.capstone.mobilestore.exception.ResourceNotFoundException;
+import com.capstone.mobilestore.repository.CartRepository;
+
+@Service
+public class CartServiceImpl implements CartService{
+	
+	@Autowired
+	private CartRepository cartRepository;
+
+	@Override
+	public Cart createCart(long customerId) {
+		 Cart newCart = new Cart();
+	     newCart.setCustomerId(customerId);
+	     newCart.setTotalAmount(0.0); // Initialize total amount to 0
+	     return cartRepository.save(newCart);
+	}
+
+
+	@Override
+	public Cart getCartById(Long cartId) {
+		 return cartRepository.findById(cartId)
+	                .orElseThrow(() -> new ResourceNotFoundException("Cart with id " + cartId + " not found"));
+	}
+
+	@Override
+	public void deleteCart(Long cartId) {
+		 Cart cart = cartRepository.findById(cartId)
+	                .orElseThrow(() -> new ResourceNotFoundException("Cart with id " + cartId + " not found"));
+	        cartRepository.delete(cart);
+	}
+
+	@Override
+	public double calculateTotalAmount(Long cartId) {
+		Cart cart = getCartById(cartId);
+        return cart.getItems().stream()
+                   .mapToDouble(item -> item.getItemTotal() * item.getQuantity())
+                   .sum();
+	}
+
+}

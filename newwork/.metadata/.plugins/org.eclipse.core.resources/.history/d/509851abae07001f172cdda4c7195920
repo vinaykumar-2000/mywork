@@ -1,0 +1,20 @@
+package com.capstone.mobilestore.model;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import com.capstone.mobilestore.entity.CartItem;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class CartResponse {
+
+	 private Long id;
+	 private Set<CartItem> cartItems = new HashSet<>();
+	 private User user;
+}

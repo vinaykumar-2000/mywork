@@ -1,0 +1,16 @@
+spring.application.name=user-service
+
+server.port= 8083
+
+spring.datasource.url = jdbc:oracle:thin:@localhost:1521/XE
+spring.datasource.username = c##capstone
+spring.datasource.password = capstone
+
+spring.jpa.show-sql = true
+spring.jpa.hibernate.ddl-auto=validate
+
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+
+
+management.endpoints.web.exposure.include= *

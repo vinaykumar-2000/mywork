@@ -1,0 +1,15 @@
+package com.capstone.mobilestore.service;
+
+import com.capstone.mobilestore.entity.Cart;
+import com.capstone.mobilestore.exception.ItemNotFoundException;
+
+public interface CartService {
+
+	Cart addToCart(Long customerId, Long mobileId) throws ItemNotFoundException;
+
+    void removeFromCart(Long cartId, Long mobileId) throws ItemNotFoundException;
+
+    void updateQuantity(Long cartId, Long mobileId, int newQuantity) throws ItemNotFoundException;
+
+    Cart getCartDetails(Long cartId) throws ItemNotFoundException;
+}

@@ -1,0 +1,5 @@
+package com.capstone.mobilestore.model;
+
+public class OrderItemResponse {
+
+}

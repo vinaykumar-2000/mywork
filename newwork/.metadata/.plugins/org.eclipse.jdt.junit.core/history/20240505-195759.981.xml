@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="OrderServiceTest" project="order-service" tests="6" started="6" failures="0" errors="1" ignored="0">
+  <testsuite name="com.capstone.mobilestore.service.OrderServiceTest" time="0.393" displayname="OrderServiceTest" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]">
+    <testcase name="testDeleteOrder" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.171" displayname="testDeleteOrder()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testDeleteOrder()]"/>
+    <testcase name="testGetOrderDetails_NotFound" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.022" displayname="testGetOrderDetails_NotFound()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testGetOrderDetails_NotFound()]"/>
+    <testcase name="testCreateOrder" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.016" displayname="testCreateOrder()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testCreateOrder()]"/>
+    <testcase name="testGetOrderDetails" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.095" displayname="testGetOrderDetails()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testGetOrderDetails()]"/>
+    <testcase name="testGetAllOrders" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.054" displayname="testGetAllOrders()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testGetAllOrders()]">
+      <error>org.mockito.exceptions.misusing.MissingMethodInvocationException: 
+when() requires an argument which has to be 'a method call on a mock'.
+For example:
+    when(mock.getArticles()).thenReturn(articles);
+
+Also, this error might show up because:
+1. you stub either of: final/private/equals()/hashCode() methods.
+   Those methods *cannot* be stubbed/verified.
+   Mocking methods declared on non-public parent classes is not supported.
+2. inside when() you don't call method on mock but on some other object.
+&#13;
+	at com.capstone.mobilestore.service.OrderServiceTest.testGetAllOrders(OrderServiceTest.java:102)&#13;
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)&#13;
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)&#13;
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)&#13;
+&#13;
+</error>
+    </testcase>
+    <testcase name="testSaveOrder" classname="com.capstone.mobilestore.service.OrderServiceTest" time="0.011" displayname="testSaveOrder()" uniqueid="[engine:junit-jupiter]/[class:com.capstone.mobilestore.service.OrderServiceTest]/[method:testSaveOrder()]"/>
+  </testsuite>
+</testrun>

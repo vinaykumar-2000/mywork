@@ -1,0 +1,13 @@
+package com.capstone.mobilestore.service;
+
+import com.capstone.mobilestore.model.User;
+
+public class UserServiceFallbackFactory implements UserServiceConsumer{
+
+	@Override
+	public User getUserDetails(int userId) {
+		// TODO Auto-generated method stub
+		return new User();
+	}
+
+}

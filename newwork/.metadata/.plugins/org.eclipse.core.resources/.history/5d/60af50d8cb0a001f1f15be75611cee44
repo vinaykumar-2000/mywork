@@ -1,0 +1,24 @@
+spring.application.name=mobile-service
+
+
+server.port= 8081
+
+spring.datasource.url = jdbc:oracle:thin:@localhost:1521/XE
+spring.datasource.username = c##capstone
+spring.datasource.password = capstone
+
+spring.jpa.show-sql = true
+spring.jpa.hibernate.ddl-auto= update
+
+management.endpoints.web.exposure.include= *
+
+# Application Properties
+api.base-url=http://localhost:8090/user-services
+auth.service.loginEndpoint=/api/login
+auth.service.registerEndpoint=/api/register
+
+
+jwt.secret=daf66e01593f61a15b857cf433aae03a005812b31234e149036bcc8dee755dbb
+jwt.expiration=604800000 # This should match the server's setting
+
+spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8080/user-service/api/token

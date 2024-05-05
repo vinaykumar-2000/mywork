@@ -1,0 +1,100 @@
+package com.capstone.mobilestore.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.capstone.mobilestore.entity.Cart;
+import com.capstone.mobilestore.entity.CartItem;
+import com.capstone.mobilestore.exception.ItemNotFoundException;
+import com.capstone.mobilestore.model.Mobile;
+import com.capstone.mobilestore.model.User;
+import com.capstone.mobilestore.repository.CartItemRepository;
+import com.capstone.mobilestore.repository.CartRepository;
+
+@Service
+public class CartServiceImpl implements CartService{
+	
+	@Autowired
+	private CartRepository cartRepository;
+
+	@Autowired
+    private CartItemRepository cartItemRepository;
+
+	@Override
+	public Cart addToCart(Long customerId, Long mobileId) throws ItemNotFoundException {
+		// 1. Find the Cart for the customer (create a new one if it doesn't exist)
+        Cart cart = cartRepository.findByUserId(customerId);
+        if (cart == null) {
+            cart = new Cart();
+            cart.setUser(new User()); // Assuming User entity exists
+            cart = cartRepository.save(cart);
+        }
+
+        // 2. Find the Mobile by ID (handle potential item not found exception)
+        Mobile mobile = mobileRepository.findById(mobileId)
+            .orElseThrow(() -> new ItemNotFoundException("Mobile with ID " + mobileId + " not found"));
+
+        // 3. Check if item already exists in cart
+        CartItem existingItem = cartItemRepository.findByCartAndMobile(cart, mobile);
+
+        // 4. If item exists, update quantity
+        if (existingItem != null) {
+            existingItem.setQuantity(existingItem.getQuantity() + 1);
+            cartItemRepository.save(existingItem);
+            return cart;
+	}
+
+	@Override
+	public void removeFromCart(Long cartId, Long mobileId) throws ItemNotFoundException {
+		 // 1. Find the Cart by ID
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() ->
+            new ItemNotFoundException("Cart with ID " + cartId + " not found"));
+
+        // 2. Find the CartItem by Cart and Mobile ID
+        CartItem itemToRemove = cartItemRepository.findByCartAndMobile(cart, new Mobile());
+
+        // 3. Handle item not found in cart scenario
+        if (itemToRemove == null) {
+            throw new ItemNotFoundException("Item with Mobile ID " + mobileId + " not found in cart");
+        }
+
+        // 4. Remove the item from CartItems and update cart total
+        cart.removeCartItem(itemToRemove); // Assuming Cart class has method removeCartItem()
+        cartItemRepository.delete(itemToRemove);
+        cart.updateTotalAmount(); // Assuming Cart has method updateTotalAmount()
+        cartRepository.save(cart);
+		
+	}
+
+	@Override
+	public void updateQuantity(Long cartId, Long mobileId, int newQuantity) throws ItemNotFoundException {
+		// 1. Find the Cart by ID
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() ->
+            new ItemNotFoundException("Cart with ID " + cartId + " not found"));
+
+        // 2. Find the CartItem by Cart and Mobile ID
+        CartItem itemToUpdate = cartItemRepository.findByCartAndMobile(cart, new Mobile(mobileId));
+
+        // 3. Handle item not found in cart scenario
+        if (itemToUpdate == null) {
+            throw new ItemNotFoundException("Item with Mobile ID " + mobileId + " not found in cart");
+        }
+
+        // 4. Update quantity and item total
+        itemToUpdate.setQuantity(newQuantity);
+        itemToUpdate.setItemTotal(newQuantity * itemToUpdate.getMobile().getPrice());
+        cartItemRepository.save(itemToUpdate);
+
+        // 5. Recalculate and update cart total amount
+        cart.updateTotalAmount(); // Assuming Cart has method updateTotalAmount()
+        cartRepository.save(cart);
+		
+	}
+
+	@Override
+	public Cart getCartDetails(Long cartId) throws ItemNotFoundException {
+		  // 1. Find the Cart by ID
+        return cartRepository.findById(cartId).orElseThrow(() ->
+            new ItemNotFoundException("Cart with ID " + cartId + " not found"));
+	}
+}

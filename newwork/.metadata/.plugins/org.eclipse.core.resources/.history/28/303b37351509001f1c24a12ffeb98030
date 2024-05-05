@@ -1,0 +1,5 @@
+package com.abc.springjwt.entity;
+
+public class User {
+
+}

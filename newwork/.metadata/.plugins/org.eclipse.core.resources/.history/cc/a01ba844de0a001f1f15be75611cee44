@@ -1,0 +1,52 @@
+package com.capstone.apigateway.filter;
+
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import com.capstone.apigateway.util.JwtUtil;
+
+import reactor.core.publisher.Mono;
+
+@Component
+public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
+
+    @Autowired
+    private RouteValidator validator;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    public AuthenticationFilter() {
+        super(Config.class);
+    }
+
+    @Override
+    public GatewayFilter apply(Config config) {
+    	return (exchange, chain) -> {
+            List<String> authHeaders = exchange.getRequest().getHeaders().get("Authorization");
+            
+            if (authHeaders == null || authHeaders.isEmpty()) {
+                // Instead of throwing an exception, return a specific error response
+                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED); // Set the HTTP status code
+                exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
+                DataBuffer dataBuffer = exchange.getResponse().bufferFactory().wrap("{\"error\":\"Unauthorized\", \"message\":\"Missing authorization header\"}".getBytes());
+                return exchange.getResponse().writeWith(Mono.just(dataBuffer));
+            }
+
+            // Continue chain if authorization header exists
+            return chain.filter(exchange);
+        };
+    }
+
+    public static class Config {
+
+    }
+}

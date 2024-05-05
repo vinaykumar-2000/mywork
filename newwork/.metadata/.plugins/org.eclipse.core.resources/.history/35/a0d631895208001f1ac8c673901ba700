@@ -1,0 +1,53 @@
+package com.capstone.mobilestore.service;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.capstone.mobilestore.entity.Cart;
+import com.capstone.mobilestore.entity.CartItem;
+import com.capstone.mobilestore.exception.ItemNotFoundException;
+import com.capstone.mobilestore.model.Customer;
+import com.capstone.mobilestore.model.Mobile;
+import com.capstone.mobilestore.repository.CartRepository;
+
+@Service
+public class CartServiceImpl implements CartService{
+
+    @Autowired
+    private CartRepository cartRepository;
+    
+    @Autowired
+    private MobileServiceConsumer mobileServiceConsumer;
+    
+    @Autowired
+    private CustomerServiceConsumer customerServiceConsumer;
+
+	@Override
+	public Cart getCartById(Long cartId) {
+		return cartRepository.findById(cartId)
+                .orElseThrow(() -> new ItemNotFoundException("Cart not found with id: " + cartId));
+	}
+
+	@Override
+	public Customer getCustomerDetailsForCart(Long cartId) {
+		 Cart cart = getCartById(cartId);
+	        long customerId = cart.getCustomerId();
+	        return customerServiceConsumer.getCustomerDetails(customerId);
+	}
+
+	@Override
+	public Cart addCartByCustomerId(Long customerId) {
+		Customer customer = customerServiceConsumer.getCustomerDetails(customerId);
+        if (customer == null) {
+            throw new ItemNotFoundException("Customer not found with id: " + customerId);
+        }
+        
+        Cart newCart = new Cart();
+        newCart.setCustomerId(customerId);
+        return cartRepository.save(newCart);
+	}
+
+	
+    
+}

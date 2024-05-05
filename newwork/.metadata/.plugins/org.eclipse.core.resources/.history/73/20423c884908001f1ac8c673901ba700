@@ -1,0 +1,57 @@
+package com.capstone.mobilestore.service;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.capstone.mobilestore.entity.Cart;
+import com.capstone.mobilestore.entity.CartItem;
+import com.capstone.mobilestore.exception.ItemNotFoundException;
+import com.capstone.mobilestore.repository.CartItemRepository;
+import com.capstone.mobilestore.repository.CartRepository;
+
+@Service
+public class CartServiceImpl implements CartService, CartItemService {
+
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private CartItemRepository cartItemRepository;
+
+    @Override
+    public Cart createCart(Long userId) {
+        Cart cart = new Cart();
+        cart.setUserId(userId);
+        return cartRepository.save(cart);
+    }
+
+    @Override
+    public Cart getCartById(Long cartId) throws ItemNotFoundException {
+        return cartRepository.findById(cartId).orElseThrow(() -> new ItemNotFoundException("Cart not found with id: " + cartId));
+    }
+
+    @Override
+    public void deleteCart(Long cartId) throws ItemNotFoundException {
+        Cart cart = getCartById(cartId);
+        cartRepository.delete(cart);
+    }
+
+    @Override
+    public CartItem addCartItem(Long cartId, Long mobileId, int quantity) throws ItemNotFoundException {
+        Cart cart = getCartById(cartId);
+        CartItem cartItem = new CartItem();
+        cartItem.setCart(cart);
+        cartItem.setMobileId(mobileId);
+        cartItem.setQuantity(quantity);
+        // Calculate and set itemTotal here
+        return cartItemRepository.save(cartItem);
+    }
+
+    @Override
+    public void removeCartItem(Long cartItemId) throws ItemNotFoundException {
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new ItemNotFoundException("Cart item not found with id: " + cartItemId));
+        cartItemRepository.delete(cartItem);
+    }
+}

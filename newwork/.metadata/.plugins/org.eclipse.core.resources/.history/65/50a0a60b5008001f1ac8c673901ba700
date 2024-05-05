@@ -1,0 +1,14 @@
+package com.capstone.mobilestore.repository;
+
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.capstone.mobilestore.entity.CartItem;
+
+
+public interface CartItemRepository extends JpaRepository<CartItem, Long>{
+
+	CartItem findByCartIdAndMobileId(Long cartId, Long mobileId);
+
+
+}

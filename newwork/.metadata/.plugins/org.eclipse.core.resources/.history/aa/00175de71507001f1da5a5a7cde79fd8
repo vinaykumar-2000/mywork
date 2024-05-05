@@ -1,0 +1,14 @@
+package com.capstone.mobilestore.service;
+
+import com.capstone.mobilestore.entity.Cart;
+
+public interface CartService {
+
+	Cart createCart(long customerId);
+
+	Cart getCartById(Long cartId);
+
+	void deleteCart(Long cartId);
+
+	double calculateTotalAmount(Long cartId);
+}

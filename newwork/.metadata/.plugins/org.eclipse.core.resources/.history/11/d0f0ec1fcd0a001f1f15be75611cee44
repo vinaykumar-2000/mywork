@@ -1,0 +1,27 @@
+package com.capstone.mobilestore.service;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+
+
+@Service
+public class ApiService {
+
+	@Value("${api.base-url}")
+    private String baseUrl;
+
+    public String getResource(String accessToken) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        String resourceUrl = baseUrl + "/api/login"; // Append specific endpoint
+        return restTemplate.exchange(resourceUrl, HttpMethod.GET, entity, String.class).getBody();
+    }
+}

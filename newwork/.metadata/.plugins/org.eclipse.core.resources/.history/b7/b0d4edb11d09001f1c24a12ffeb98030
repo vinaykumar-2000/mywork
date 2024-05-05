@@ -1,0 +1,5 @@
+package com.abc.springjwt.model;
+
+public class Login {
+
+}
