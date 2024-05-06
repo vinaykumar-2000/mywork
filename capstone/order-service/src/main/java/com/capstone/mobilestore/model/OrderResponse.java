@@ -1,0 +1,23 @@
+package com.capstone.mobilestore.model;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class OrderResponse {
+
+	private long id;
+	private double orderTotal;
+	private LocalDate orderDate;
+	private String status;
+	private String paymentMethod;
+	private Customer customer;
+	private List<OrderItemResponse> orderItems;
+
+}
